@@ -1,5 +1,7 @@
 package hk.ftp.impl;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.DirectoryStream;
+
+import org.apache.log4j.Logger;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -89,7 +93,7 @@ public class MyFileManager extends FileManager
 		serverPath=dbo.getRealPath(fs.getUserName(),clientPath,FileManager.READ_PERMISSION);
 		logger.debug("Server Path="+serverPath);
 		logger.debug("Server Path ACL="+fs.getUser().getServerPathACL());
-		fileNameList=getFileNameList(fs.getUser(),serverPath);
+		fileNameList=getFileNameList(fs,serverPath);
 		//fileNameList=getFileNameList(fs.getUserName(),serverPath);
 		if (fs.isPassiveModeTransfer)
 		{
@@ -114,7 +118,7 @@ public class MyFileManager extends FileManager
 		serverPath=dbo.getRealPath(fs.getUserName(),clientPath,FileManager.READ_PERMISSION);
 		logger.debug("Server Path="+serverPath);
 		logger.debug("Server Path ACL="+fs.getUser().getServerPathACL());
-		fileNameList=getFullDirList(fs.getUser(),serverPath);
+		fileNameList=getFullDirList(fs,serverPath);
 		//fileNameList=getFileNameList(fs.getUserName(),serverPath);
 		if (fs.isPassiveModeTransfer)
 		{
@@ -129,10 +133,11 @@ public class MyFileManager extends FileManager
 			aTx.transferFileNameList(fileNameList, ctx);
 		}
 	}
-	private String getFullDirList(User user, String serverPath) 
+	private String getFullDirList(FtpSession fs, String serverPath) 
 	{
 		// TODO Auto-generated method stub
-		String resultString=new String(),serverDir,permission;
+		User user=fs.getUser();
+		StringBuilder resultString=new StringBuilder();
 		Hashtable<String, String> serverPathACL=user.getServerPathACL();
 		logger.debug("Server Path ACL size="+serverPathACL.size());
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(serverPath))) 
@@ -143,24 +148,26 @@ public class MyFileManager extends FileManager
           		if (Files.isDirectory(path))
         		 {
          			if (isReadableServerDir(serverPathACL,path))
-         				resultString+=Utility.formatPathName(path);
+         				resultString.append(Utility.formatPathName(path));
         		 }
         		 else
         		 {
         			 if (isReadableServerFile(serverPathACL,path))
-          				resultString+=Utility.formatPathName(path);
+          				resultString.append(Utility.formatPathName(path));
         		 }
             } 
 		}
         catch (IOException ex) 
     	{}
-    	return resultString;
+    	return resultString.toString();
 	}
-	private String getFileNameList(User user, String serverPath) 
+	private String getFileNameList(FtpSession fs, String serverPath) 
 	{
 		// TODO Auto-generated method stub
-		String resultString=new String(),serverDir,permission;
-		Hashtable<String, String> serverPathACL=user.getServerPathACL();
+		StringBuilder resultString=new StringBuilder();
+		ArrayList<String> result=new ArrayList<String>();
+		Hashtable<String, String> clientPathACL=fs.getUser().getClientPathACL();
+		Hashtable<String, String> serverPathACL=fs.getUser().getServerPathACL();
 		logger.debug("Server Path ACL size="+serverPathACL.size());
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(serverPath))) 
 		{
@@ -170,18 +177,59 @@ public class MyFileManager extends FileManager
           		if (Files.isDirectory(path))
         		 {
          			if (isReadableServerDir(serverPathACL,path))
-         				resultString+=(path.getFileName().toString())+"\r\n";
+         				//resultString.append(path.getFileName().toString()+"\r\n");
+         				result.add(path.getFileName().toString());
         		 }
         		 else
         		 {
         			 if (isReadableServerFile(serverPathACL,path))
-          				resultString+=(path.getFileName().toString())+"\r\n";
+        			//	 resultString.append(path.getFileName().toString()+"\r\n");
+        				 result.add(path.getFileName().toString());
         		 }
-            } 
+            }
+			logger.debug("Client Path ACL size="+clientPathACL.size());
+			addVirtualDirectoryName(fs.getCurrentPath(),clientPathACL,result);
+			logger.debug("result1="+result.toString());
+			Collections.sort(result);
+			logger.debug("result2="+result.toString());
+			for (String temp :result)
+			{
+				resultString.append(temp+"\r\n");
+			}
 		}
         catch (IOException ex) 
     	{}
-    	return resultString;
+    	return resultString.toString();
+	}
+	private void addVirtualDirectoryName(String currentPath,Hashtable<String, String> clientPathACL, ArrayList<String> nameList) 
+	{
+		int index;
+		boolean result;
+		String virDir,parentDir;
+		Enumeration<String> clientPaths=clientPathACL.keys();
+		while (clientPaths.hasMoreElements())
+		{
+			virDir=clientPaths.nextElement();
+			if (virDir.equals("")||virDir.equals(currentPath))
+				continue;
+			else
+			{
+				index=virDir.lastIndexOf("/");
+				parentDir=virDir.substring(0,index+1);
+				//logger.debug("Current Path="+currentPath+",Virtual Client Path="+virDir+",Parent folder="+parentDir+",index="+index);
+				if (parentDir.equals(currentPath)||parentDir.equals(currentPath+"/"))
+				{
+					virDir=virDir.replaceAll(currentPath, "");
+					index=virDir.indexOf("/");
+					if (index==0)
+						virDir=virDir.substring(index+1);
+					logger.debug("Current Path="+currentPath+",Virtual Client Path="+virDir+",Parent folder="+parentDir+",index="+index);
+					nameList.add(virDir);
+				}
+			}
+			
+		}
+		
 	}
 	private boolean isReadableServerFile(Hashtable<String, String> serverPathACL,Path p)
 	{
@@ -191,7 +239,7 @@ public class MyFileManager extends FileManager
 		while (serverPaths.hasMoreElements())
 		{
 			temp=serverPaths.nextElement();
-			logger.debug("temp="+temp);
+			logger.debug("Server Path="+temp);
 			if (p.toString().equals(temp))
 			{
 				permission=serverPathACL.get(temp);
