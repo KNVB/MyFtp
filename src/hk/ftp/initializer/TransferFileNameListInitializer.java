@@ -3,21 +3,22 @@ package hk.ftp.initializer;
 import hk.ftp.Configuration;
 import hk.ftp.listener.TransferFileNameListCompleteListener;
 import hk.ftp.handler.TransferFileNameListHandler;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 
 public class TransferFileNameListInitializer  extends ChannelInitializer 
 {
+	String clientIp;
 	Configuration config;
 	ChannelHandlerContext responseCtx;
-	String fileNameList=new String(),clientIp;
 	
-	public TransferFileNameListInitializer (String fileNameList,ChannelHandlerContext c,String clientIp,Configuration config)
+	StringBuilder fileNameList=new StringBuilder();
+	
+	public TransferFileNameListInitializer (StringBuilder fileNameList2,ChannelHandlerContext c,String clientIp,Configuration config)
 	{
 		this.responseCtx=c;
-		this.fileNameList=fileNameList;
+		this.fileNameList=fileNameList2;
 		this.config=config;
 		this.clientIp=clientIp;
 	}

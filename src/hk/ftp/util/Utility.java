@@ -48,7 +48,7 @@ public class Utility
         	dateString=(new SimpleDateFormat("MMM dd HH:mm",fileLocale).format(fileDate.getTime()));
         else
         	dateString=(new SimpleDateFormat("MMM dd yyyy",fileLocale).format(fileDate.getTime()));
-        return String.format("%s%5d %-9s%-9s%10d %-12s %s\r\n",permission,node,user,group,Files.size(path),dateString,(path.getFileName().toString()));
+        return String.format("%s%5d %-9s%-9s%10d %-12s %s",permission,node,user,group,Files.size(path),dateString,(path.getFileName().toString()));
 	}
 	public static final String resolveClientPath(Logger logger,String currentPath,String inPath)
     {        

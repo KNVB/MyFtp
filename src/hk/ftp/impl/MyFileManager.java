@@ -87,7 +87,8 @@ public class MyFileManager extends FileManager
 	public void showFileNameList(FtpSession fs, ChannelHandlerContext ctx,String inPath) throws AccessDeniedException, PathNotFoundException 
 	{
 		// TODO Auto-generated method stub
-		String serverPath=new String(),fileNameList=new String();
+		String serverPath=new String();
+		StringBuilder fileNameList=new StringBuilder();
 		String clientPath=Utility.resolveClientPath(logger,fs.getCurrentPath(), inPath);
 		config=fs.getConfig();
 		serverPath=dbo.getRealPath(fs.getUserName(),clientPath,FileManager.READ_PERMISSION);
@@ -112,7 +113,8 @@ public class MyFileManager extends FileManager
 	public void showFullDirList(FtpSession fs, ChannelHandlerContext ctx,String inPath) throws AccessDeniedException, PathNotFoundException 
 	{
 		// TODO Auto-generated method stub
-		String serverPath=new String(),fileNameList=new String();
+		String serverPath=new String();
+		StringBuilder fileNameList=new StringBuilder();
 		String clientPath=Utility.resolveClientPath(logger,fs.getCurrentPath(), inPath);
 		config=fs.getConfig();
 		serverPath=dbo.getRealPath(fs.getUserName(),clientPath,FileManager.READ_PERMISSION);
@@ -133,35 +135,7 @@ public class MyFileManager extends FileManager
 			aTx.transferFileNameList(fileNameList, ctx);
 		}
 	}
-	private String getFullDirList(FtpSession fs, String serverPath) 
-	{
-		// TODO Auto-generated method stub
-		User user=fs.getUser();
-		StringBuilder resultString=new StringBuilder();
-		Hashtable<String, String> serverPathACL=user.getServerPathACL();
-		logger.debug("Server Path ACL size="+serverPathACL.size());
-		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(serverPath))) 
-		{
-			for (Path path : directoryStream) 
-            {
-	            logger.debug(path.toString()+","+isReadableServerDir(serverPathACL,path));
-          		if (Files.isDirectory(path))
-        		 {
-         			if (isReadableServerDir(serverPathACL,path))
-         				resultString.append(Utility.formatPathName(path));
-        		 }
-        		 else
-        		 {
-        			 if (isReadableServerFile(serverPathACL,path))
-          				resultString.append(Utility.formatPathName(path));
-        		 }
-            } 
-		}
-        catch (IOException ex) 
-    	{}
-    	return resultString.toString();
-	}
-	private String getFileNameList(FtpSession fs, String serverPath) 
+	private StringBuilder getFullDirList(FtpSession fs, String serverPath) throws AccessDeniedException, PathNotFoundException 
 	{
 		// TODO Auto-generated method stub
 		StringBuilder resultString=new StringBuilder();
@@ -177,13 +151,52 @@ public class MyFileManager extends FileManager
           		if (Files.isDirectory(path))
         		 {
          			if (isReadableServerDir(serverPathACL,path))
-         				//resultString.append(path.getFileName().toString()+"\r\n");
+         				result.add(Utility.formatPathName(path));
+        		 }
+        		 else
+        		 {
+        			 if (isReadableServerFile(serverPathACL,path))
+        				 result.add(Utility.formatPathName(path));
+        		 }
+            }
+			logger.debug("Client Path ACL size="+clientPathACL.size());
+			addVirtualDirectoryList(fs,clientPathACL,result);
+			//logger.debug("result1="+result.toString());
+			Collections.sort(result);
+			//logger.debug("result2="+result.toString());
+			for (String temp :result)
+			{
+				resultString.append(temp+"\r\n");
+			}
+		}
+        catch (IOException ex) 
+    	{}
+    	return resultString;
+	}
+
+	
+	private StringBuilder getFileNameList(FtpSession fs, String serverPath) 
+	{
+		// TODO Auto-generated method stub
+		StringBuilder resultString=new StringBuilder();
+		ArrayList<String> result=new ArrayList<String>();
+		Hashtable<String, String> clientPathACL=fs.getUser().getClientPathACL();
+		Hashtable<String, String> serverPathACL=fs.getUser().getServerPathACL();
+		logger.debug("Server Path ACL size="+serverPathACL.size());
+		
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(serverPath))) 
+		{
+			for (Path path : directoryStream) 
+            {
+	            logger.debug(path.toString()+","+isReadableServerDir(serverPathACL,path));
+          		if (Files.isDirectory(path))
+        		 {
+         			if (isReadableServerDir(serverPathACL,path))
          				result.add(path.getFileName().toString());
         		 }
         		 else
         		 {
         			 if (isReadableServerFile(serverPathACL,path))
-        			//	 resultString.append(path.getFileName().toString()+"\r\n");
         				 result.add(path.getFileName().toString());
         		 }
             }
@@ -199,12 +212,40 @@ public class MyFileManager extends FileManager
 		}
         catch (IOException ex) 
     	{}
-    	return resultString.toString();
+    	return resultString;
+	}
+	private void addVirtualDirectoryList(FtpSession fs,Hashtable<String, String> clientPathACL, ArrayList<String> nameList) throws AccessDeniedException, PathNotFoundException, IOException 
+	{
+		int index;
+		String virDir,parentDir,currentPath=fs.getCurrentPath();
+		Enumeration<String> clientPaths=clientPathACL.keys();
+		while (clientPaths.hasMoreElements())
+		{
+			virDir=clientPaths.nextElement();
+			if (virDir.equals("")||virDir.equals(currentPath))
+				continue;
+			else
+			{
+				index=virDir.lastIndexOf("/");
+				parentDir=virDir.substring(0,index+1);
+				if (parentDir.equals(currentPath)||parentDir.equals(currentPath+"/"))
+				{
+					String serverPath=dbo.getRealPath(fs.getUserName(), virDir, FileManager.READ_PERMISSION);
+					virDir=virDir.replaceAll(currentPath, "");
+					index=virDir.indexOf("/");
+					if (index==0)
+						virDir=virDir.substring(index+1);
+					logger.debug("Current Path="+currentPath+",Virtual Client Path="+virDir+",Parent folder="+parentDir+",serverPath="+serverPath+",index="+index);
+					nameList.add(Utility.formatPathName(Paths.get(serverPath)));
+				}
+			}
+			
+		}
+		
 	}
 	private void addVirtualDirectoryName(String currentPath,Hashtable<String, String> clientPathACL, ArrayList<String> nameList) 
 	{
 		int index;
-		boolean result;
 		String virDir,parentDir;
 		Enumeration<String> clientPaths=clientPathACL.keys();
 		while (clientPaths.hasMoreElements())
@@ -216,7 +257,6 @@ public class MyFileManager extends FileManager
 			{
 				index=virDir.lastIndexOf("/");
 				parentDir=virDir.substring(0,index+1);
-				//logger.debug("Current Path="+currentPath+",Virtual Client Path="+virDir+",Parent folder="+parentDir+",index="+index);
 				if (parentDir.equals(currentPath)||parentDir.equals(currentPath+"/"))
 				{
 					virDir=virDir.replaceAll(currentPath, "");
