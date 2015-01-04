@@ -1,23 +1,12 @@
 package hk.ftp.impl;
+import java.io.*;
+import java.util.*;
+import java.nio.file.*;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.BufferedOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.DirectoryStream;
 
 import org.apache.log4j.Logger;
 
 import io.netty.channel.ChannelHandlerContext;
-
-
-
 import hk.ftp.Configuration;
 import hk.ftp.FileManager;
 import hk.ftp.FtpSession;
@@ -135,11 +124,12 @@ public class MyFileManager extends FileManager
 			aTx.transferFileNameList(fileNameList, ctx);
 		}
 	}
+	@SuppressWarnings("unchecked")
 	private StringBuilder getFullDirList(FtpSession fs, String serverPath) throws AccessDeniedException, PathNotFoundException 
 	{
 		// TODO Auto-generated method stub
 		StringBuilder resultString=new StringBuilder();
-		ArrayList<String> result=new ArrayList<String>();
+		TreeMap<String,String> result=new TreeMap<String,String>();
 		Hashtable<String, String> clientPathACL=fs.getUser().getClientPathACL();
 		Hashtable<String, String> serverPathACL=fs.getUser().getServerPathACL();
 		logger.debug("Server Path ACL size="+serverPathACL.size());
@@ -151,23 +141,25 @@ public class MyFileManager extends FileManager
           		if (Files.isDirectory(path))
         		 {
          			if (isReadableServerDir(serverPathACL,path))
-         				result.add(Utility.formatPathName(path));
+         				result.put((path.getFileName().toString()),Utility.formatPathName(path));
         		 }
         		 else
         		 {
         			 if (isReadableServerFile(serverPathACL,path))
-        				 result.add(Utility.formatPathName(path));
+        				 result.put((path.getFileName().toString()),Utility.formatPathName(path));
         		 }
             }
 			logger.debug("Client Path ACL size="+clientPathACL.size());
 			addVirtualDirectoryList(fs,clientPathACL,result);
-			//logger.debug("result1="+result.toString());
-			Collections.sort(result);
-			//logger.debug("result2="+result.toString());
-			for (String temp :result)
-			{
-				resultString.append(temp+"\r\n");
-			}
+			Set set = result.entrySet();
+		    // Get an iterator
+		    Iterator i = set.iterator();
+		    // Display elements
+		    while(i.hasNext()) 
+		    {
+		        Map.Entry<String,String> me = (Map.Entry<String, String>)i.next();
+		        resultString.append(me.getValue()+me.getKey()+"\r\n");
+		    }
 		}
         catch (IOException ex) 
     	{}
@@ -214,7 +206,7 @@ public class MyFileManager extends FileManager
     	{}
     	return resultString;
 	}
-	private void addVirtualDirectoryList(FtpSession fs,Hashtable<String, String> clientPathACL, ArrayList<String> nameList) throws AccessDeniedException, PathNotFoundException, IOException 
+	private void addVirtualDirectoryList(FtpSession fs,Hashtable<String, String> clientPathACL,TreeMap<String,String> nameList) throws AccessDeniedException, PathNotFoundException, IOException 
 	{
 		int index;
 		String virDir,parentDir,currentPath=fs.getCurrentPath();
@@ -236,7 +228,7 @@ public class MyFileManager extends FileManager
 					if (index==0)
 						virDir=virDir.substring(index+1);
 					logger.debug("Current Path="+currentPath+",Virtual Client Path="+virDir+",Parent folder="+parentDir+",serverPath="+serverPath+",index="+index);
-					nameList.add(Utility.formatPathName(Paths.get(serverPath)));
+					nameList.put(virDir,Utility.formatPathName(Paths.get(serverPath)));
 				}
 			}
 			
