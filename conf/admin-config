@@ -1,0 +1,3 @@
+#FTP Admin. Server Configurations
+port=4466
+startFTPServer=false
