@@ -20,7 +20,7 @@ public class Configuration
 	private ManagersFactory mf=null;
 	
 	protected ArrayList<Integer> passivePorts=new ArrayList<Integer>();
-	protected boolean supportPassiveMode=false,havePassivePortSpecified=false;
+	private boolean supportPassiveMode=false,havePassivePortSpecified=false;
 	private UserManager userManager=null;
 	private FileManager fileManager=null;
 	private int maxConnection=0,clientConnectionTimeOut=30000;
@@ -144,5 +144,12 @@ public class Configuration
 	{
 		return this.clientConnectionTimeOut;
 	}
-
+	public boolean isSupportPassiveMode() 
+	{
+		return supportPassiveMode;
+	}
+	public boolean isPassivePortSpecified() 
+	{
+		return havePassivePortSpecified;
+	}
 }

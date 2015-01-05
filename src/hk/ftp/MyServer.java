@@ -40,7 +40,7 @@ public class MyServer
 			if (config.load())
 			{
 				logger.info("FTP Server Initialization completed.");
-				if ((config.supportPassiveMode) && (config.havePassivePortSpecified))
+				if ((config.isSupportPassiveMode()) && (config.isPassivePortSpecified()))
 				{
 					passivePorts=config.passivePorts;
 					passiveServerSocketInUse=new Hashtable<Integer,ServerSocket>();

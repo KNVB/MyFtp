@@ -6,7 +6,7 @@ encoding=UTF-8
 maxConnection=1
 supportPassiveMode=true
 #passivePortRange=1234,4567-4576,4466
-passivePortRange=1232,1234
+passivePortRange=1232-1234
 #client connection time out in second
 clientConnectionTimeOut=900
 ftpMessageLocale=en_us
