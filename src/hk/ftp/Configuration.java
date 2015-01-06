@@ -3,7 +3,7 @@ package hk.ftp;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.Stack;
 import java.util.Locale;
 
 import hk.ftp.util.ManagersFactory;
@@ -19,8 +19,8 @@ public class Configuration
 	private String ftpMessageLocale=new String();
 	private ManagersFactory mf=null;
 	
-	protected ArrayList<Integer> passivePorts=new ArrayList<Integer>();
-	private boolean supportPassiveMode=false,havePassivePortSpecified=false;
+	protected Stack<Integer> passivePorts=new Stack<Integer>();
+	protected boolean supportPassiveMode=false,havePassivePortSpecified=false;
 	private UserManager userManager=null;
 	private FileManager fileManager=null;
 	private int maxConnection=0,clientConnectionTimeOut=30000;
@@ -144,12 +144,5 @@ public class Configuration
 	{
 		return this.clientConnectionTimeOut;
 	}
-	public boolean isSupportPassiveMode() 
-	{
-		return supportPassiveMode;
-	}
-	public boolean isPassivePortSpecified() 
-	{
-		return havePassivePortSpecified;
-	}
+
 }

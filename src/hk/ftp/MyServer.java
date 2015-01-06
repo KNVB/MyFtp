@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.net.ServerSocket;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
+import java.util.Stack;
 import java.util.Hashtable;
 import java.util.Properties;
 
@@ -28,8 +28,8 @@ public class MyServer
     
 	private Logger logger=null;
 	private Configuration config=null;
-	private ArrayList<Integer> passivePorts;
-	private Hashtable<Integer,ServerSocket> passiveServerSocketInUse;
+	private Stack<Integer> passivePorts;
+	//private Hashtable<Integer,ServerSocket> passiveServerSocketInUse;
 
 	static int maxConnectionCount=1,connectionCount=0;
 	public void init()
@@ -40,10 +40,10 @@ public class MyServer
 			if (config.load())
 			{
 				logger.info("FTP Server Initialization completed.");
-				if ((config.isSupportPassiveMode()) && (config.isPassivePortSpecified()))
+				if ((config.supportPassiveMode) && (config.havePassivePortSpecified))
 				{
 					passivePorts=config.passivePorts;
-					passiveServerSocketInUse=new Hashtable<Integer,ServerSocket>();
+					//passiveServerSocketInUse=new Hashtable<Integer,ServerSocket>();
 					//logger.debug(passivePorts==null);
 				}
 			}
@@ -136,6 +136,23 @@ public class MyServer
 	public Configuration getConfig()
 	{
 		return config;
+	}
+	public boolean isSupportPassiveMode()
+	{
+		return config.supportPassiveMode;
+	}
+	public synchronized int getNextPassivePort()
+	{
+		int nextPassivePort=-1;
+		if (config.supportPassiveMode)
+		{
+			if (config.havePassivePortSpecified)
+			{
+				if (passivePorts.size()>0)
+					nextPassivePort=passivePorts.pop();
+			}
+		}
+		return nextPassivePort;
 	}
 	public static void main(String[] args) throws Exception 
 	{
