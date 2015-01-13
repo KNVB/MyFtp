@@ -1,5 +1,6 @@
 package hk.ftp;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -16,6 +17,8 @@ public class FtpSession  extends SimpleChannelInboundHandler<String>
 	private FtpCommandHandler ftpCommandHandler=null; 
 	private String userName=new String(),clientIP=new String();
 	private String currentPath=new String(),txMode="I";
+	private ChannelHandlerContext passiveChannelContext=null;
+	private PassiveServer passiveServer=null;
 	public boolean isPassiveModeTransfer;
 	public FtpSession(MyServer mS,String remoteIp)
 	{
@@ -92,6 +95,31 @@ public class FtpSession  extends SimpleChannelInboundHandler<String>
 	{
 		// TODO Auto-generated method stub
 		txMode=mode;
+	}
+	public void setPassiveChannelContext(ChannelHandlerContext  ctx) 
+	{
+		// TODO Auto-generated method stub
+		this.passiveChannelContext=ctx;
+	}	
+	public ChannelHandlerContext getPassiveChannelContext() 
+	{
+		// TODO Auto-generated method stub
+		return this.passiveChannelContext;
+	}
+	public void returnPassivePort(int port) 
+	{
+		// TODO Auto-generated method stub
+		myServer.returnPassivePort(port);
+	}
+	public void setPassiveServer(PassiveServer passiveServer) 
+	{
+		// TODO Auto-generated method stub
+		this.passiveServer=passiveServer;
+	}
+	public PassiveServer getPassiveServer() 
+	{
+		// TODO Auto-generated method stub
+		return this.passiveServer;
 	}
 	public MyServer getServer() 
 	{

@@ -20,7 +20,11 @@ public class Utility
 		// TODO Auto-generated method stub
 		ctx.writeAndFlush(Unpooled.copiedBuffer(ftpMessage+"\r\n",CharsetUtil.UTF_8)).addListener(new SendResponseToUserListener(fs,ftpMessage));
 	}
-
+	public static void sendMessageToClient(Channel ctx,FtpSession fs, String ftpMessage) 
+	{
+		// TODO Auto-generated method stub
+		ctx.writeAndFlush(Unpooled.copiedBuffer(ftpMessage+"\r\n",CharsetUtil.UTF_8)).addListener(new SendResponseToUserListener(fs,ftpMessage));
+	}
 	public static void sendMessageToClient(Channel ch, Logger logger,String remoteIp,String ftpMessage) 
 	{
 		// TODO Auto-generated method stub

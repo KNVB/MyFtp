@@ -1,22 +1,20 @@
 package hk.ftp;
 import hk.ftp.initializer.*;
 
+import java.util.Stack;
+import java.util.Properties;
+
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.net.ServerSocket;
 import java.net.InetSocketAddress;
-import java.util.Stack;
-import java.util.Hashtable;
-import java.util.Properties;
+import java.io.FileNotFoundException;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
+import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class MyServer 
@@ -154,6 +152,13 @@ public class MyServer
 		}
 		return nextPassivePort;
 	}
+	public void returnPassivePort(int port) 
+	{
+		// TODO Auto-generated method stub
+		passivePorts.push(port);
+		logger.debug("Passive Port:"+port+" return");
+	}	
+
 	public static void main(String[] args) throws Exception 
 	{
 		MyServer m=new MyServer();

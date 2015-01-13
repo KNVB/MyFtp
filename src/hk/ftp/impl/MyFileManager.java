@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 
 import org.apache.log4j.Logger;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import hk.ftp.Configuration;
 import hk.ftp.FileManager;
@@ -14,7 +15,9 @@ import hk.ftp.User;
 import hk.ftp.exception.AccessDeniedException;
 import hk.ftp.exception.PathNotFoundException;
 import hk.ftp.initializer.TransferFileNameListInitializer;
+import hk.ftp.listener.PassiveTxCompleteListener;
 import hk.ftp.tx.ActiveModeTx;
+import hk.ftp.tx.PassiveModeTx;
 import hk.ftp.util.Utility;
 
 public class MyFileManager extends FileManager 
@@ -88,7 +91,10 @@ public class MyFileManager extends FileManager
 		if (fs.isPassiveModeTransfer)
 		{
 			logger.debug("Passive mode");
-			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
+			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
+			Utility.sendMessageToClient(fs.getPassiveChannelContext(),fs,fileNameList.toString());
+			//fs.getPassiveChannel().close();
+			//Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
 		}
 		else
 		{
@@ -114,7 +120,11 @@ public class MyFileManager extends FileManager
 		if (fs.isPassiveModeTransfer)
 		{
 			logger.debug("Passive mode");
-			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
+			//Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
+			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
+			//fs.getPassiveChannelContext().close().addListener(new PassiveTxCompleteListener(fs.getPassiveServer(),fs,ctx));
+			PassiveModeTx passiveModeTx=new PassiveModeTx(fs.getPassiveChannelContext());
+			passiveModeTx.transFileNameList(fs, fileNameList);
 		}
 		else
 		{
