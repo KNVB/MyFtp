@@ -1,6 +1,5 @@
 package hk.ftp;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -91,6 +90,10 @@ public class FtpSession  extends SimpleChannelInboundHandler<String>
 	{
 		return clientIP;
 	}
+	public String getTransferMode()
+	{
+		return txMode;
+	}
 	public void setTransferMode(String mode) 
 	{
 		// TODO Auto-generated method stub
@@ -110,7 +113,7 @@ public class FtpSession  extends SimpleChannelInboundHandler<String>
 	{
 		// TODO Auto-generated method stub
 		myServer.returnPassivePort(port);
-	}
+	}	
 	public void setPassiveServer(PassiveServer passiveServer) 
 	{
 		// TODO Auto-generated method stub

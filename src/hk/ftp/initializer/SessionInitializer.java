@@ -34,11 +34,11 @@ public class SessionInitializer extends ChannelInitializer
 		}
 		else
 		{	
-			
-			ch.closeFuture().addListener(new SessionClosureListener(s));
+			FtpSession fs=new FtpSession(s,remoteIp);
+			ch.closeFuture().addListener(new SessionClosureListener(s,fs));
 			
 			ch.pipeline().addLast("decoder",new StringDecoder(CharsetUtil.UTF_8));
-			ch.pipeline().addLast(new FtpSession(s,remoteIp));
+			ch.pipeline().addLast(fs);
 			
 			Utility.sendMessageToClient(ch,s.getConfig().getLogger(),remoteIp,"220 "+config.getFtpMessage("Greeting_Message"));
 		}		

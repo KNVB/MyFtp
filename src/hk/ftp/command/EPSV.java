@@ -3,6 +3,7 @@ package hk.ftp.command;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 
 import org.apache.log4j.Logger;
@@ -22,8 +23,8 @@ public class EPSV implements FtpCommandInterface {
 	public void execute(FtpSession fs,ChannelHandlerContext ctx, String param, Logger logger) 
 	{
 		// TODO Auto-generated method stub
-		int port,index;
-		String message=new String();
+		int port;
+		String message=new String(),localIp=new String();
 		MyServer server=fs.getServer();
 		if (server.isSupportPassiveMode())
 		{
@@ -34,6 +35,10 @@ public class EPSV implements FtpCommandInterface {
 			{	
 				message=fs.getConfig().getFtpMessage("229_EPSV_Ok");
 				message=message.replaceAll("%1", String.valueOf(port));
+				localIp=((InetSocketAddress)ctx.channel().localAddress()).getAddress().getHostAddress();
+				fs.isPassiveModeTransfer=true;						
+				PassiveServer ps=new PassiveServer(fs,ctx,logger,localIp,port);
+				ps.start();
 			}
 		}
 		else

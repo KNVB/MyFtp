@@ -155,8 +155,11 @@ public class MyServer
 	public void returnPassivePort(int port) 
 	{
 		// TODO Auto-generated method stub
-		passivePorts.push(port);
-		logger.debug("Passive Port:"+port+" return");
+		if (!passivePorts.contains(port))
+		{	
+			passivePorts.push(port);
+			logger.debug("Passive Port:"+port+" return");
+		}
 	}	
 
 	public static void main(String[] args) throws Exception 

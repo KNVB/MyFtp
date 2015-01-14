@@ -1,5 +1,7 @@
 package hk.ftp.command;
 
+import java.net.InetSocketAddress;
+
 import io.netty.channel.ChannelHandlerContext;
 
 import org.apache.log4j.Logger;
@@ -23,9 +25,9 @@ public class PASV implements FtpCommandInterface
 	public void execute(FtpSession fs, ChannelHandlerContext ctx, String param,	Logger logger) 
 	{
 		// TODO Auto-generated method stub
-		int port,index;
+		int port;
 		MyServer server=fs.getServer();
-		String message=new String(),localIP=ctx.channel().localAddress().toString();
+		String message=new String(),localIP=((InetSocketAddress)ctx.channel().localAddress()).getAddress().getHostAddress();;
 		//logger.debug("Local address:"+ctx.channel().localAddress());
 		if (server.isSupportPassiveMode())
 		{
@@ -35,16 +37,12 @@ public class PASV implements FtpCommandInterface
 			else
 			{	
 				logger.debug("Port "+port+" is assigned.");
-				fs.isPassiveModeTransfer=true;				 
+				fs.isPassiveModeTransfer=true;
 				message=fs.getConfig().getFtpMessage("227_Enter_Passive_Mode");
-				index=localIP.indexOf(":");
-				localIP=localIP.substring(1,index);
-				
-				localIP=localIP.replaceAll("\\.", ",");
-				message=message.replaceAll("%1", localIP);
+				message=message.replaceAll("%1", localIP.replaceAll("\\.", ","));
 				message=message.replaceAll("%2", String.valueOf(port/256));
 				message=message.replaceAll("%3", String.valueOf(port % 256));
-				PassiveServer ps=new PassiveServer(fs,ctx,logger,port);
+				PassiveServer ps=new PassiveServer(fs,ctx,logger,localIP,port);
 				ps.start();
 			}
 		}

@@ -147,14 +147,16 @@ public class MyFileManager extends FileManager
 		{
 			for (Path path : directoryStream) 
             {
-	            logger.debug(path.toString()+","+isReadableServerDir(serverPathACL,path));
+	            
           		if (Files.isDirectory(path))
         		 {
+          			logger.debug(path.toString()+",Server path is accessible:"+isReadableServerDir(serverPathACL,path));
          			if (isReadableServerDir(serverPathACL,path))
          				result.put((path.getFileName().toString()),Utility.formatPathName(path));
         		 }
         		 else
         		 {
+        			 logger.debug(path.toString()+",Server file is accessible:"+isReadableServerFile(serverPathACL,path));
         			 if (isReadableServerFile(serverPathACL,path))
         				 result.put((path.getFileName().toString()),Utility.formatPathName(path));
         		 }
@@ -281,10 +283,11 @@ public class MyFileManager extends FileManager
 		while (serverPaths.hasMoreElements())
 		{
 			temp=serverPaths.nextElement();
-			logger.debug("Server Path="+temp);
+			//logger.debug("Server File="+temp+",p="+p.toString()+","+p.toString().equals(temp));
 			if (p.toString().equals(temp))
 			{
 				permission=serverPathACL.get(temp);
+				//logger.debug("Server File="+temp+",permission="+permission+","+permission.indexOf(FileManager.NO_ACCESS));
 				if (permission.indexOf(FileManager.NO_ACCESS)>-1)
 				{
 					result=false;

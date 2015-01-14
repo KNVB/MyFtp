@@ -14,19 +14,27 @@ public class PassiveServer
 	private int port;
 	
 	private FtpSession fs;
+	private boolean stopped=true;
 	private Logger logger=null;
 	private NioEventLoopGroup bossGroup;
 	private NioEventLoopGroup workerGroup ;
-	private String ipAddress="0.0.0.0";
+	private String ipAddress=null;
 	private ChannelHandlerContext responseCtx;
-	public PassiveServer(FtpSession fs,ChannelHandlerContext ctx, Logger l,int port)
+	public PassiveServer(FtpSession fs,ChannelHandlerContext ctx, Logger l,String localIp,int port)
 	{
 		this.fs=fs;
 		this.logger=l;
 		this.port=port;
 		this.responseCtx=ctx;
 		this.fs.setPassiveServer(this);
+		this.ipAddress=localIp;
 	}
+	public int getPort() 
+	{
+		// TODO Auto-generated method stub
+		return this.port;
+	}
+
 	public void start()
 	{
 		 try 
@@ -42,6 +50,7 @@ public class PassiveServer
 	            bootStrap.bind(inSocketAddress);
 	            logger.info("Passive Server Started");
 	            logger.info("Passive Server listening " +ipAddress+":" + port);
+	            stopped=false;
 	        } 
 	        catch (Exception e) 
 	        {
@@ -59,5 +68,10 @@ public class PassiveServer
         bossGroup=null;
         fs.returnPassivePort(port);
         logger.debug("Passive Server shutdown gracefully.");
+        stopped=true;
+	}
+	public boolean isStopped()
+	{
+		return stopped;
 	}
 }

@@ -82,13 +82,13 @@ public class DbOp {
 			while (rs.next())
 			{
 				logger.debug("vir_dir="+rs.getString("vir_dir")+",phy_dir="+rs.getString("phy_dir")+",permission="+rs.getString("permission"));
-				if (!rs.getString("vir_dir").equals(""))
+				if ((rs.getString("vir_dir")!=null) && (!rs.getString("vir_dir").equals("")))
 				{
-					user.addClientPathACL(rs.getString("vir_dir"), rs.getString("permission"));
+					user.addClientPathACL(rs.getString("vir_dir").trim(), rs.getString("permission").trim());
 				}
-				if (!rs.getString("phy_dir").equals(""))
+				if ((rs.getString("phy_dir")!=null) &&   (!rs.getString("phy_dir").equals("")))
 				{
-					user.addServerPathACL(rs.getString("phy_dir"), rs.getString("permission"));
+					user.addServerPathACL(rs.getString("phy_dir").trim(), rs.getString("permission").trim());
 				}
 			}
 		}
