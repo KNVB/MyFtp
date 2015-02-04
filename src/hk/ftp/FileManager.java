@@ -34,12 +34,12 @@ public abstract class FileManager
 		this.logger=config.getLogger();
 	}
 	 
-	public abstract BufferedReader getTextFileContent(User u,String path);
-	public abstract BufferedOutputStream getBinaryFileContent(User u,String path);
-	
+
+	public abstract long getPathSize(FtpSession fs, String clientPath)throws AccessDeniedException, PathNotFoundException;
 	public abstract void changeDirectory(FtpSession fs,String inPath) throws AccessDeniedException, PathNotFoundException;
-	
+	public abstract void downloadFile(FtpSession fs, ChannelHandlerContext ctx,String inPath) throws AccessDeniedException, PathNotFoundException,QuotaExceedException;
 	public abstract void showFileNameList(FtpSession fs, ChannelHandlerContext ctx,String inPath) throws AccessDeniedException, PathNotFoundException;
 	public abstract void showFullDirList(FtpSession fs, ChannelHandlerContext ctx,String inPath) throws AccessDeniedException, PathNotFoundException;
 	public abstract void close();
+
 }

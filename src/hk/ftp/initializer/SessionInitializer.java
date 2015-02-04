@@ -39,7 +39,6 @@ public class SessionInitializer extends ChannelInitializer
 			
 			ch.pipeline().addLast("decoder",new StringDecoder(CharsetUtil.UTF_8));
 			ch.pipeline().addLast(fs);
-			
 			Utility.sendMessageToClient(ch,s.getConfig().getLogger(),remoteIp,"220 "+config.getFtpMessage("Greeting_Message"));
 		}		
 	}

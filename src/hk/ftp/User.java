@@ -1,18 +1,20 @@
 package hk.ftp;
  
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Hashtable;
 public class User 
 {
 	int quota=0; //Quota in Kilo byte
 	boolean active=false;
 	String name=new String(),password=new String(),homeDir=new String();
-	Hashtable<String, String> serverPathACL=new Hashtable<String, String>();
+	Hashtable<Path, String> serverPathACL=new Hashtable<Path, String>();
 	Hashtable<String, String> clientPathACL=new Hashtable<String, String>();
 	public Hashtable<String, String> getClientPathACL()
 	{
 		return clientPathACL;
 	}
-	public Hashtable<String, String> getServerPathACL()
+	public Hashtable<Path, String> getServerPathACL()
 	{
 		return serverPathACL;
 	}
@@ -22,7 +24,7 @@ public class User
 	}
 	public void addServerPathACL(String phyDir,String permission)
 	{
-		serverPathACL.put(phyDir, permission);
+		serverPathACL.put(Paths.get(phyDir), permission);
 	}
 	public String getName() 
 	{

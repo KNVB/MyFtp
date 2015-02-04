@@ -62,10 +62,16 @@ public class PassiveServer
 	public void stop() 
 	{
 		// TODO Auto-generated method stub
-		bossGroup.shutdownGracefully();
-        workerGroup.shutdownGracefully();
-        workerGroup=null;
-        bossGroup=null;
+		if (bossGroup!=null)
+		{
+			bossGroup.shutdownGracefully();
+			bossGroup=null;
+		}
+		if (workerGroup!=null)
+        {
+			workerGroup.shutdownGracefully();
+			workerGroup=null;
+        }
         fs.returnPassivePort(port);
         logger.debug("Passive Server shutdown gracefully.");
         stopped=true;

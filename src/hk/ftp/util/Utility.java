@@ -101,4 +101,14 @@ public class Utility
 	        logger.debug("System type="+result);
 	        return result;
 	}
+	public static void sendBinaryFileToClient(FtpSession fs, String serverPath,	Logger logger) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	public static void sendTextFileToClient(FtpSession fs, String serverPath,Logger logger) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

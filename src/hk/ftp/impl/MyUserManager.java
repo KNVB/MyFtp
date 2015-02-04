@@ -90,7 +90,7 @@ public class MyUserManager extends UserManager
 		User u=dbo.login(userName, password);
 		try
 		{
-			String realPath=dbo.getRealPath(userName,"/",FileManager.READ_PERMISSION);
+			String realPath=dbo.getRealHomePath(userName,"/",FileManager.READ_PERMISSION);
 			dbo.loadACL(u);
 			logger.debug("Client path ACL size="+u.getClientPathACL().size());
 			logger.debug("Server path ACL size="+u.getServerPathACL().size());

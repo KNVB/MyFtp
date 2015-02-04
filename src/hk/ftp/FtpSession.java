@@ -36,7 +36,12 @@ public class FtpSession  extends SimpleChannelInboundHandler<String>
 		// TODO Auto-generated method stub
 		commandString=msg.trim();
 		logger.info("commandString="+commandString);
-		ftpCommandHandler.doCommand(ctx,commandString, logger);
+		String commands[]=commandString.split("\n");
+		for (String command:commands)
+		{
+			logger.debug("command:"+command);
+			ftpCommandHandler.doCommand(ctx,command.trim(), logger);
+		}
 	}
     public void exceptionCaught(ChannelHandlerContext ctx,Throwable cause) 
     {
@@ -124,6 +129,7 @@ public class FtpSession  extends SimpleChannelInboundHandler<String>
 		// TODO Auto-generated method stub
 		return this.passiveServer;
 	}
+	
 	public MyServer getServer() 
 	{
 		return myServer;

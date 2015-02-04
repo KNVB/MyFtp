@@ -108,9 +108,10 @@ public class MyServer
             bootStrap.group(bossGroup, workerGroup);
             bootStrap.channel(NioServerSocketChannel.class);
             bootStrap.childHandler(new SessionInitializer(this));
-            InetSocketAddress inSocketAddress=new InetSocketAddress(ipAddress,port);         
+            bootStrap.localAddress(port);
+            //InetSocketAddress inSocketAddress=new InetSocketAddress(ipAddress,port);         
             //Channel ch = bootStrap.bind(inSocketAddress).sync().channel();
-            bootStrap.bind(inSocketAddress);
+            bootStrap.bind();
             logger.info("Server Started");
             logger.info("Server listening " +ipAddress+":" + port);
         } 

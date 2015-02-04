@@ -101,7 +101,7 @@ public class DbOp {
 			releaseResource(rs, stmt);
 		}
 	}
-	public String getRealPath(String userName,String virPath,String permission) throws AccessDeniedException,PathNotFoundException
+	private String queryRealPath(String userName,String currentPath,String virPath,String permission)throws AccessDeniedException,PathNotFoundException
 	{
 		int i,resultCode=-1;
 		ResultSet rs = null;
@@ -109,9 +109,16 @@ public class DbOp {
 		String realPath=null,pathPerm;
 		String clientPath=virPath,restPath=new String(),sql;
 		sql="select phy_dir,permission from virdir_2_phydir where user_name=? and vir_dir=? and active=1";
-		if (clientPath.endsWith("/") && (!clientPath.equals("/")))
+		if (clientPath.indexOf("/")==-1)
 		{
+			clientPath=currentPath+clientPath;
+		}
+		else	
+		{
+			if (clientPath.endsWith("/") && (!clientPath.equals("/")))
+			{
 			clientPath=clientPath.substring(0,clientPath.length()-1);
+			}
 		}
 		
 		try
@@ -165,10 +172,15 @@ public class DbOp {
 					else
 					{
 						i=clientPath.lastIndexOf("/");
-						restPath=clientPath.substring(i)+restPath;
-						if (i==0)
-							i=1;
-						clientPath=clientPath.substring(0,i);
+						if (i==-1)
+							clientPath=currentPath;
+						else	
+						{
+							restPath=clientPath.substring(i)+restPath;
+							if (i==0)
+								i=1;
+							clientPath=clientPath.substring(0,i);
+						}
 					}
 				}
 			}
@@ -177,6 +189,12 @@ public class DbOp {
 		catch (SQLException e)
 		{
 			e.printStackTrace();
+			resultCode=-2;
+		}
+		catch (StringIndexOutOfBoundsException se)
+		{
+			se.printStackTrace();
+			resultCode=-3;
 		}
 		finally
 		{
@@ -188,6 +206,7 @@ public class DbOp {
 				case FileManager.PATH_NOT_FOUND:throw new PathNotFoundException(config.getFtpMessage("450_Directory_Not_Found"));
 				default							:try
 												 {	
+													logger.debug("realPath="+realPath);
 													realPath=Paths.get(realPath).toRealPath().toString();
 												 }
 												 catch (Exception e)
@@ -198,6 +217,14 @@ public class DbOp {
 		}
 		logger.debug("RealPath="+realPath);
 		return realPath;
+	}
+	public String getRealHomePath(String userName,String virPath,String permission) throws AccessDeniedException,PathNotFoundException
+	{
+		return queryRealPath(userName,"/",virPath,permission);
+	}
+	public String getRealPath(FtpSession fs,String virPath,String permission) throws AccessDeniedException,PathNotFoundException
+	{
+		return queryRealPath(fs.getUserName(),fs.getCurrentPath(),virPath,permission);
 	}
 	public Vector<User> listAllUser() 
 	{

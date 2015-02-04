@@ -1,12 +1,8 @@
 package hk.ftp.command;
 
-import io.netty.channel.ChannelHandlerContext;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-
 import org.apache.log4j.Logger;
+import java.net.InetSocketAddress;
+import io.netty.channel.ChannelHandlerContext;
 
 import hk.ftp.*;
 import hk.ftp.util.Utility;
