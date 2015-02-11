@@ -66,10 +66,6 @@ public class MyFileManager extends FileManager
 				fs.setCurrentPath(clientPath);
 			else
 				throw new AccessDeniedException(config.getFtpMessage("550_Permission_Denied"));
-			/*if (isReadableServerDir(user.getServerPathACL(),Paths.get(serverPath)))
-				fs.setCurrentPath(clientPath);
-			else
-				throw new AccessDeniedException(config.getFtpMessage("550_Permission_Denied"));*/
 		}
 		else
 		{	
@@ -86,16 +82,20 @@ public class MyFileManager extends FileManager
 		logger.debug("serverPath="+serverPath);
 		if (isReadableServerPath(user.getServerPathACL(),Paths.get(serverPath)))
 		{	
-			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
+			//Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
 			if (fs.isPassiveModeTransfer)
 			{
-				logger.debug("Passive mode");
+				//Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
+				logger.debug("File download in passive mode");
+				Utility.sendFileToClient(fs.getPassiveChannelContext(),fs,Paths.get(serverPath));
 			}
 			else
 			{
-				logger.debug("Active mode");
+				logger.debug("File download in active mode");
+				ActiveModeTx aTx=new ActiveModeTx(fs.getClientIp(),fs.getClientDataPortNo(), fs.getConfig());
+				aTx.transferFile(Paths.get(serverPath), ctx,fs.getTransferMode());
 			}
-			//Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
+			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
 		}
 		else
 		{	
