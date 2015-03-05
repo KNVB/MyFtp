@@ -101,6 +101,7 @@ public class Utility
 	        logger.debug("System type="+result);
 	        return result;
 	}
+	/*	
 	public static void sendFileToClient(ChannelHandlerContext passiveChannelContext, FtpSession fs,	Path path) 
 	{
 		// TODO Auto-generated method stub
@@ -114,7 +115,7 @@ public class Utility
 		}
 	}
 
-	/*public static void sendBinaryFileToClient(FtpSession fs, String serverPath,	Logger logger) 
+	public static void sendBinaryFileToClient(FtpSession fs, String serverPath,	Logger logger) 
 	{
 		// TODO Auto-generated method stub
 		

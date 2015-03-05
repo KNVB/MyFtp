@@ -1,5 +1,7 @@
 package hk.ftp.tx;
 
+import java.nio.file.Path;
+
 import hk.ftp.FtpSession;
 import hk.ftp.util.Utility;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,5 +17,10 @@ public class PassiveModeTx
 	{
 		Utility.sendMessageToClient(txCtx,fs,fileNameList.toString());
 		txCtx.close();
+	}
+	public void transFile(Path path, ChannelHandlerContext responseCtx,	String transferMode) 
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

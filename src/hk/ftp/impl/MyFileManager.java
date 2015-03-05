@@ -17,6 +17,7 @@ import hk.ftp.exception.PathNotFoundException;
 import hk.ftp.exception.QuotaExceedException;
 import hk.ftp.initializer.TransferFileNameListInitializer;
 import hk.ftp.listener.PassiveTxCompleteListener;
+import hk.ftp.tx.ActiveModeFileTx;
 import hk.ftp.tx.ActiveModeTx;
 import hk.ftp.tx.PassiveModeTx;
 import hk.ftp.util.Utility;
@@ -87,15 +88,19 @@ public class MyFileManager extends FileManager
 			{
 				//Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
 				logger.debug("File download in passive mode");
-				Utility.sendFileToClient(fs.getPassiveChannelContext(),fs,Paths.get(serverPath));
+				//Utility.sendFileToClient(fs.getPassiveChannelContext(),fs,Paths.get(serverPath));
+				PassiveModeTx passiveModeTx=new PassiveModeTx(fs.getPassiveChannelContext());
+				passiveModeTx.transFile(Paths.get(serverPath),ctx,fs.getTransferMode());
+				Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
 			}
 			else
 			{
 				logger.debug("File download in active mode");
-				ActiveModeTx aTx=new ActiveModeTx(fs.getClientIp(),fs.getClientDataPortNo(), fs.getConfig());
-				aTx.transferFile(Paths.get(serverPath), ctx,fs.getTransferMode());
+				Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
+				ActiveModeFileTx atx=new ActiveModeFileTx(fs, Paths.get(serverPath),ctx);
+				
 			}
-			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
+			
 		}
 		else
 		{	
@@ -119,7 +124,11 @@ public class MyFileManager extends FileManager
 		{
 			logger.debug("Passive mode");
 			
-			Utility.sendMessageToClient(fs.getPassiveChannelContext(),fs,fileNameList.toString());
+			PassiveModeTx passiveModeTx=new PassiveModeTx(fs.getPassiveChannelContext());
+			passiveModeTx.transFileNameList(fs, fileNameList);
+			
+			//Utility.sendMessageToClient(fs.getPassiveChannelContext(),fs,fileNameList.toString());
+			
 			//fs.getPassiveChannel().close();
 			//Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
 		}
