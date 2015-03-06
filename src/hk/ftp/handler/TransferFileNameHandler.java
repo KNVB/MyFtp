@@ -1,32 +1,33 @@
 package hk.ftp.handler;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import hk.ftp.Configuration;
 import hk.ftp.FtpSession;
-import hk.ftp.listener.ActiveTxCompleteListener;
+import hk.ftp.listener.TransferFileCompleteListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.DefaultFileRegion;
 import io.netty.handler.stream.ChunkedFile;
 import io.netty.handler.stream.ChunkedNioFile;
 
-public class ActiveModeFileTransferHandler extends ChannelInboundHandlerAdapter 
+public class TransferFileNameHandler extends ChannelInboundHandlerAdapter 
 {
 	Configuration config;
-	Path filePath;
+	String filePath;
 	FtpSession fs;
 	String txMode;
 	ChannelHandlerContext responseCtx;
-	public ActiveModeFileTransferHandler(FtpSession fs,Path filePath,ChannelHandlerContext responseCtx)
+	public TransferFileNameHandler(String filePath,FtpSession fs,ChannelHandlerContext rCtx)
 	{
 		this.config=fs.getConfig();
 		this.filePath=filePath;
 		this.fs=fs;
 		this.txMode=fs.getTransferMode();
-		this.responseCtx=responseCtx;
+		this.responseCtx=rCtx;
 	}
 	@Override
     public void channelActive(ChannelHandlerContext ctx) 
@@ -35,10 +36,7 @@ public class ActiveModeFileTransferHandler extends ChannelInboundHandlerAdapter
 		{
 			try 
 			{
-				//ctx.writeAndFlush(new DefaultFileRegion(filePath.toFile(),0,Files.size(filePath)), ctx.newProgressivePromise()).addListener(new ABCListener(ctx,responseCtx,config));
-				ctx.writeAndFlush(new ChunkedNioFile(filePath.toFile()), ctx.newProgressivePromise()).addListener(new ActiveTxCompleteListener(config.getLogger(),fs.getClientIp()));
-				//ctx.close();
-				//ctx.channel().writeAndFlush(new ChunkedNioFile(filePath.toFile())).addListener(new ABCListener(ctx,responseCtx,config));
+				ctx.writeAndFlush(new ChunkedNioFile(new File(filePath)), ctx.newProgressivePromise()).addListener(new TransferFileCompleteListener(fs,responseCtx));
 			} 
 			catch (IOException e) 
 			{

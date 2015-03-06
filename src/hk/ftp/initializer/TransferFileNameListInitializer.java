@@ -1,33 +1,28 @@
 package hk.ftp.initializer;
 
-import hk.ftp.Configuration;
-import hk.ftp.listener.TransferFileNameListCompleteListener;
+import hk.ftp.FtpSession;
 import hk.ftp.handler.TransferFileNameListHandler;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.socket.SocketChannel;
 
-public class TransferFileNameListInitializer  extends ChannelInitializer 
+public class TransferFileNameListInitializer extends ChannelInitializer<SocketChannel>
 {
-	String clientIp;
-	Configuration config;
-	ChannelHandlerContext responseCtx;
 	
+	FtpSession fs;
+	ChannelHandlerContext responseCtx;
 	StringBuilder fileNameList=new StringBuilder();
 	
-	public TransferFileNameListInitializer (StringBuilder fileNameList2,ChannelHandlerContext c,String clientIp,Configuration config)
+	public TransferFileNameListInitializer(StringBuilder fileNameList2,ChannelHandlerContext c,FtpSession fs)
 	{
 		this.responseCtx=c;
 		this.fileNameList=fileNameList2;
-		this.config=config;
-		this.clientIp=clientIp;
+		this.fs=fs;
+		
 	}
-	@Override
-	protected void initChannel(Channel ch) throws Exception 
+	protected void initChannel(SocketChannel ch) throws Exception 
 	{
 		// TODO Auto-generated method stub
-		ch.closeFuture().addListener(new TransferFileNameListCompleteListener(config,this.clientIp,responseCtx));
-		ch.pipeline().addLast(new TransferFileNameListHandler(fileNameList,responseCtx,config));
+		ch.pipeline().addLast(new TransferFileNameListHandler(fileNameList,responseCtx,fs));
 	}
-
 }

@@ -17,7 +17,7 @@ import hk.ftp.exception.PathNotFoundException;
 import hk.ftp.exception.QuotaExceedException;
 import hk.ftp.initializer.TransferFileNameListInitializer;
 import hk.ftp.listener.PassiveTxCompleteListener;
-import hk.ftp.tx.ActiveModeFileTx;
+//import hk.ftp.tx.ActiveModeFileTx;
 import hk.ftp.tx.ActiveModeTx;
 import hk.ftp.tx.PassiveModeTx;
 import hk.ftp.util.Utility;
@@ -97,7 +97,9 @@ public class MyFileManager extends FileManager
 			{
 				logger.debug("File download in active mode");
 				Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
-				ActiveModeFileTx atx=new ActiveModeFileTx(fs, Paths.get(serverPath),ctx);
+				ActiveModeTx aTx=new ActiveModeTx(fs);
+				aTx.transferFile(serverPath, ctx);
+				//ActiveModeFileTx atx=new ActiveModeFileTx(fs, Paths.get(serverPath),ctx);
 				
 			}
 			
@@ -136,7 +138,7 @@ public class MyFileManager extends FileManager
 		{
 			logger.debug("Active mode");
 			//Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
-			ActiveModeTx aTx=new ActiveModeTx(fs.getClientIp(),fs.getClientDataPortNo(), fs.getConfig());
+			ActiveModeTx aTx=new ActiveModeTx(fs);
 			aTx.transferFileNameList(fileNameList, ctx);
 		}
 	}
@@ -166,7 +168,7 @@ public class MyFileManager extends FileManager
 		{
 			logger.debug("Active mode");
 			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
-			ActiveModeTx aTx=new ActiveModeTx(fs.getClientIp(),fs.getClientDataPortNo(), fs.getConfig());
+			ActiveModeTx aTx=new ActiveModeTx(fs);
 			aTx.transferFileNameList(fileNameList, ctx);
 		}
 	}
