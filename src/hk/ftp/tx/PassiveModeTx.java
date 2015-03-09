@@ -2,7 +2,7 @@ package hk.ftp.tx;
 
 import java.nio.file.Path;
 
-import hk.ftp.FtpSession;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 import io.netty.channel.ChannelHandlerContext;
 

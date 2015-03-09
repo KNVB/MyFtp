@@ -1,8 +1,7 @@
 package hk.ftp.initializer;
 
-import hk.ftp.FtpSession;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.handler.TransferFileNameHandler;
-
 import hk.ftp.listener.TransferFileCompleteListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;

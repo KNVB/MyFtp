@@ -5,8 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import org.apache.log4j.Logger;
 
 import hk.ftp.FileManager;
-import hk.ftp.FtpSession;
 import hk.ftp.exception.*;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 
 public class NLST implements hk.ftp.FtpCommandInterface {

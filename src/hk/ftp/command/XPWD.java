@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import org.apache.log4j.Logger;
 
 import hk.ftp.FtpCommandInterface;
-import hk.ftp.FtpSession;
+import hk.ftp.handler.FtpSession;
 
 public class XPWD extends PWD implements FtpCommandInterface  {
 

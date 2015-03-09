@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import org.apache.log4j.Logger;
 
-import hk.ftp.FtpSession;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 
 public class PWD implements hk.ftp.FtpCommandInterface {

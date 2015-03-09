@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import hk.ftp.Configuration;
 import hk.ftp.FtpCommandInterface;
-import hk.ftp.FtpSession;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 public class QUIT implements FtpCommandInterface
 {

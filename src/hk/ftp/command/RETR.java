@@ -6,10 +6,10 @@ import org.apache.log4j.Logger;
 
 import hk.ftp.FileManager;
 import hk.ftp.FtpCommandInterface;
-import hk.ftp.FtpSession;
 import hk.ftp.exception.AccessDeniedException;
 import hk.ftp.exception.PathNotFoundException;
 import hk.ftp.exception.QuotaExceedException;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 
 public class RETR implements FtpCommandInterface {

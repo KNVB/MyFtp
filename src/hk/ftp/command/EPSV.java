@@ -1,10 +1,12 @@
 package hk.ftp.command;
 
 import org.apache.log4j.Logger;
-import java.net.InetSocketAddress;
-import io.netty.channel.ChannelHandlerContext;
 
+import java.net.InetSocketAddress;
+
+import io.netty.channel.ChannelHandlerContext;
 import hk.ftp.*;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 
 public class EPSV implements FtpCommandInterface {

@@ -3,8 +3,8 @@ package hk.ftp.initializer;
 import java.net.InetSocketAddress;
 
 import hk.ftp.Configuration;
-import hk.ftp.FtpSession;
 import hk.ftp.MyServer;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.listener.SessionClosureListener;
 import hk.ftp.util.Utility;
 import io.netty.channel.Channel;

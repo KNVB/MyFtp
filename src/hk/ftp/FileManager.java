@@ -1,6 +1,7 @@
 package hk.ftp;
 
 import hk.ftp.exception.*;
+import hk.ftp.handler.FtpSession;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.BufferedReader;

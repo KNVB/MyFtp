@@ -1,6 +1,7 @@
 package hk.ftp;
 import org.apache.log4j.Logger;
 
+import hk.ftp.handler.FtpSession;
 import hk.ftp.initializer.PassiveInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;

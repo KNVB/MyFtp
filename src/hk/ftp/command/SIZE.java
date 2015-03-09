@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import hk.ftp.*;
 import hk.ftp.exception.AccessDeniedException;
 import hk.ftp.exception.PathNotFoundException;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 
 public class SIZE implements FtpCommandInterface 

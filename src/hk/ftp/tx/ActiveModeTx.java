@@ -3,7 +3,7 @@ package hk.ftp.tx;
 import java.nio.file.Path;
 
 import hk.ftp.Configuration;
-import hk.ftp.FtpSession;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.initializer.TransferFileInitializer;
 import hk.ftp.initializer.TransferFileNameListInitializer;
 import hk.ftp.listener.TransferFileCompleteListener;

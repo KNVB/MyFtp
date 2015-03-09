@@ -7,9 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import org.apache.log4j.Logger;
 
 import hk.ftp.FtpCommandInterface;
-import hk.ftp.FtpSession;
 import hk.ftp.MyServer;
 import hk.ftp.PassiveServer;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 
 public class PASV implements FtpCommandInterface 

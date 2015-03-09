@@ -2,6 +2,7 @@ package hk.ftp;
 
 import org.apache.log4j.Logger;
 
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

@@ -1,8 +1,8 @@
 package hk.ftp.listener;
 
 import hk.ftp.Configuration;
-import hk.ftp.FtpSession;
 import hk.ftp.PassiveServer;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;

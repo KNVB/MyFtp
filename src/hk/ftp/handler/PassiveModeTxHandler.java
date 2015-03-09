@@ -1,5 +1,4 @@
 package hk.ftp.handler;
-import hk.ftp.FtpSession;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 

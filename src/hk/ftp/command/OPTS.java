@@ -1,5 +1,6 @@
 package hk.ftp.command;
 import hk.ftp.*;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 import io.netty.channel.ChannelHandlerContext;
 

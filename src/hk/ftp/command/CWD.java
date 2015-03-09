@@ -1,6 +1,7 @@
 package hk.ftp.command;
 import hk.ftp.*;
 import hk.ftp.util.*;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.impl.DbOp;
 import hk.ftp.exception.*;
 

@@ -10,7 +10,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.util.CharsetUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import hk.ftp.FtpSession;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.listener.SendResponseToUserListener;
 
 public class Utility

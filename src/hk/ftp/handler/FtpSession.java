@@ -1,5 +1,10 @@
-package hk.ftp;
+package hk.ftp.handler;
 
+import hk.ftp.Configuration;
+import hk.ftp.FtpCommandHandler;
+import hk.ftp.MyServer;
+import hk.ftp.PassiveServer;
+import hk.ftp.User;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 

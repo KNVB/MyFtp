@@ -1,7 +1,6 @@
 package hk.ftp.handler;
 
 import hk.ftp.Configuration;
-import hk.ftp.FtpSession;
 import hk.ftp.listener.TransferFileCompleteListener;
 import hk.ftp.listener.TransferFileNameListCompleteListener;
 import io.netty.buffer.Unpooled;

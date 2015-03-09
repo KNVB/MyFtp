@@ -1,6 +1,7 @@
 package hk.ftp.command;
 import hk.ftp.*;
 import hk.ftp.exception.*;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 
 import org.apache.log4j.Logger;

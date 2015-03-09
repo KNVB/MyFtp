@@ -7,6 +7,7 @@ import java.util.*;
 
 import hk.ftp.*;
 import hk.ftp.exception.*;
+import hk.ftp.handler.FtpSession;
 
 import org.apache.log4j.Logger;
 

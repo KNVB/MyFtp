@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import hk.ftp.Configuration;
-import hk.ftp.FtpSession;
 import hk.ftp.listener.TransferFileCompleteListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

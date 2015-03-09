@@ -1,6 +1,6 @@
 package hk.ftp.initializer;
-import hk.ftp.FtpSession;
 import hk.ftp.PassiveServer;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.handler.PassiveModeTxHandler;
 import hk.ftp.listener.PassiveTxCompleteListener;
 import io.netty.channel.Channel;

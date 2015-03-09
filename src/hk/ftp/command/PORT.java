@@ -1,8 +1,10 @@
 package hk.ftp.command;
 
-import hk.ftp.FtpSession;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
+
 import org.apache.log4j.Logger;
+
 import hk.ftp.FtpCommandInterface;
 import io.netty.channel.ChannelHandlerContext;
 

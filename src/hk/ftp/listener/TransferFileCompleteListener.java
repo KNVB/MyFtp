@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 import org.apache.log4j.Logger;
 
 import hk.ftp.Configuration;
-import hk.ftp.FtpSession;
+import hk.ftp.handler.FtpSession;
 import hk.ftp.util.Utility;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
