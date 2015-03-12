@@ -33,7 +33,7 @@ public class USER implements FtpCommandInterface
 			message=message.replaceAll("%1", param);
 			fs.setUserName(param);
 		}
-		Utility.sendMessageToClient(ctx,fs, message);
+		Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), message);
 	}
 
 }

@@ -15,7 +15,12 @@ import hk.ftp.listener.SendResponseToUserListener;
 
 public class Utility
 {
-	public static void sendMessageToClient(ChannelHandlerContext ctx,FtpSession fs, String ftpMessage) 
+	public static void sendMessageToClient(Channel ch, Logger logger,String remoteIp,String ftpMessage) 
+	{
+		// TODO Auto-generated method stub
+		ch.writeAndFlush(Unpooled.copiedBuffer(ftpMessage+"\r\n",CharsetUtil.UTF_8)).addListener(new SendResponseToUserListener(logger,remoteIp,ftpMessage));
+	}
+	/*public static void sendMessageToClient(ChannelHandlerContext ctx,FtpSession fs, String ftpMessage) 
 	{
 		// TODO Auto-generated method stub
 		ctx.writeAndFlush(Unpooled.copiedBuffer(ftpMessage+"\r\n",CharsetUtil.UTF_8)).addListener(new SendResponseToUserListener(fs,ftpMessage));
@@ -34,7 +39,7 @@ public class Utility
 	{
 		// TODO Auto-generated method stub
 		ctx.writeAndFlush(Unpooled.copiedBuffer(responseMessage+"\r\n",CharsetUtil.UTF_8)).addListener(new SendResponseToUserListener(logger,remoteIp,responseMessage));
-	}
+	}*/
 	public static final String formatPathName(Path path) throws IOException
 	{
 		int thisYear,node=1;

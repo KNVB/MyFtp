@@ -48,7 +48,7 @@ public class PASS implements FtpCommandInterface
 				message=e.getMessage();
 			}
 		}
-		Utility.sendMessageToClient(ctx,fs, message);
+		Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), message);
 	}
 
 }

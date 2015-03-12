@@ -15,7 +15,7 @@ public class PassiveModeTx
 	}
 	public void transFileNameList(FtpSession fs,StringBuilder fileNameList)
 	{
-		Utility.sendMessageToClient(txCtx,fs,fileNameList.toString());
+		Utility.sendMessageToClient(txCtx.channel(),fs.getConfig().getLogger(),fs.getClientIp(),fileNameList.toString());
 		txCtx.close();
 	}
 	public void transFile(Path path, ChannelHandlerContext responseCtx,	String transferMode) 

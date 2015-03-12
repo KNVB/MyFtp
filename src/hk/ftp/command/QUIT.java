@@ -22,7 +22,7 @@ public class QUIT implements FtpCommandInterface
 	public void execute(FtpSession fs,ChannelHandlerContext ctx, String param, Logger logger) 
 	{
 		// TODO Auto-generated method stub
-		Utility.sendMessageToClient(ctx,fs,fs.getConfig().getFtpMessage("221_Logout_Ok"));
+		Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),fs.getConfig().getFtpMessage("221_Logout_Ok"));
 		ctx.close().addListener(ChannelFutureListener.CLOSE);
 	}
 }

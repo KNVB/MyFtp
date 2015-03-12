@@ -23,7 +23,7 @@ public class FtpCommandHandler
 	{
 		if (inString==null)
 		{
-			Utility.sendMessageToClient(ctx,thisSession,config.getFtpMessage("500_NULL_Command"));
+			Utility.sendMessageToClient(ctx.channel(),logger,thisSession.getClientIp(),config.getFtpMessage("500_NULL_Command"));
 		}
 		else
 		{
@@ -53,7 +53,7 @@ public class FtpCommandHandler
 					case "QUIT":
 					case "PASS":executeCommand(ctx,command,parameters);
 								break;
-					default:Utility.sendMessageToClient(ctx,thisSession,config.getFtpMessage("530_Not_Login"));
+					default:Utility.sendMessageToClient(ctx.channel(),logger,thisSession.getClientIp(),config.getFtpMessage("530_Not_Login"));
 							break;	
 				}
 			}
@@ -71,7 +71,7 @@ public class FtpCommandHandler
 		{
 			// TODO Auto-generated catch block
 			logger.info(cmdString.toUpperCase()+" command not implemented");
-			Utility.sendMessageToClient(ctx,thisSession,config.getFtpMessage("502_Command_Not_Implemeneted"));
+			Utility.sendMessageToClient(ctx.channel(),logger,thisSession.getClientIp(),config.getFtpMessage("502_Command_Not_Implemeneted"));
 		}
 		catch (Exception err)
 		{

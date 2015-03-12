@@ -43,7 +43,7 @@ public class EPSV implements FtpCommandInterface {
 		{
 			message=fs.getConfig().getFtpMessage("502_Command_Not_Implemeneted");
 		}
-		Utility.sendMessageToClient(ctx,fs, message);	
+		Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), message);	
 	}
 
 }

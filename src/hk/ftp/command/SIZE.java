@@ -27,12 +27,12 @@ public class SIZE implements FtpCommandInterface
 			long size=fm.getPathSize(fs, param);
 			message=fs.getConfig().getFtpMessage("213_File_Size");
 			message=message.replaceAll("%1", String.valueOf(size));
-			Utility.sendMessageToClient(ctx,fs,message);
+			Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),message);
 		} 
 		catch (AccessDeniedException | PathNotFoundException e) 
 		{
 			// TODO Auto-generated catch block
-			Utility.sendMessageToClient(ctx,fs,e.getMessage());
+			Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),e.getMessage());
 		}
 	}
 

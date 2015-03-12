@@ -25,7 +25,7 @@ public class PassiveTxCompleteListener implements ChannelFutureListener
 	{
 		// TODO Auto-generated method stub
 		this.passiveServer.stop();
-		Utility.sendMessageToClient(responseCtx,fs, fs.getConfig().getFtpMessage("226_Transfer_Ok")); 
+		Utility.sendMessageToClient(responseCtx.channel(),fs.getConfig().getLogger(),fs.getClientIp(), fs.getConfig().getFtpMessage("226_Transfer_Ok")); 
 		//Utility.sendMessageToClient(responseCtx,config.getLogger(),clientIp, config.getFtpMessage("226_Transfer_Ok"));
 	}
 	

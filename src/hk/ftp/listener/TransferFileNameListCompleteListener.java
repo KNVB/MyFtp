@@ -26,7 +26,7 @@ public class TransferFileNameListCompleteListener implements ChannelFutureListen
 		// TODO Auto-generated method stub
 		config.getLogger().debug("File name list transfered to "+clientIp+" Completed.");
 		ch.channel().close();
-		Utility.sendMessageToClient(responseCtx,config.getLogger(),clientIp, config.getFtpMessage("226_Transfer_Ok"));
+		Utility.sendMessageToClient(responseCtx.channel(),config.getLogger(),clientIp, config.getFtpMessage("226_Transfer_Ok"));
 	}
 
 }

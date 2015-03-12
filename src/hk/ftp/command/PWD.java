@@ -18,7 +18,7 @@ public class PWD implements hk.ftp.FtpCommandInterface {
 	@Override
 	public void execute(FtpSession fs, ChannelHandlerContext ctx, String param,Logger logger)	
 	{
-		Utility.sendMessageToClient(ctx,fs, fs.getConfig().getFtpMessage("257_PWD").replaceAll("%1", fs.getCurrentPath()));
+		Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), fs.getConfig().getFtpMessage("257_PWD").replaceAll("%1", fs.getCurrentPath()));
 	}
 	
 }

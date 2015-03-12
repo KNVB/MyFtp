@@ -32,6 +32,6 @@ public class TransferFileCompleteListener implements ChannelFutureListener
 		
 		logger.debug("file transfer completed.");
 		qq.channel().close();
-		Utility.sendMessageToClient(this.responseCtx,logger, remoteIp, config.getFtpMessage("226_Transfer_Ok")); 
+		Utility.sendMessageToClient(this.responseCtx.channel(),logger, remoteIp, config.getFtpMessage("226_Transfer_Ok")); 
 	}
 }

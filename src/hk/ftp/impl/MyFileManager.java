@@ -21,7 +21,7 @@ import hk.ftp.listener.PassiveTxCompleteListener;
 import hk.ftp.tx.ActiveModeTx;
 import hk.ftp.tx.PassiveModeTx;
 import hk.ftp.util.Utility;
-
+//
 public class MyFileManager extends FileManager 
 {
 	DbOp dbo=null;
@@ -91,12 +91,12 @@ public class MyFileManager extends FileManager
 				//Utility.sendFileToClient(fs.getPassiveChannelContext(),fs,Paths.get(serverPath));
 				PassiveModeTx passiveModeTx=new PassiveModeTx(fs.getPassiveChannelContext());
 				passiveModeTx.transFile(Paths.get(serverPath),ctx,fs.getTransferMode());
-				Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
+				Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),config.getFtpMessage("502_Command_Not_Implemeneted"));
 			}
 			else
 			{
 				logger.debug("File download in active mode");
-				Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
+				Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),config.getFtpMessage("150_Open_Data_Conn"));
 				ActiveModeTx aTx=new ActiveModeTx(fs);
 				aTx.transferFile(serverPath, ctx);
 				//ActiveModeFileTx atx=new ActiveModeFileTx(fs, Paths.get(serverPath),ctx);
@@ -121,7 +121,7 @@ public class MyFileManager extends FileManager
 		logger.debug("Server Path="+serverPath);
 		logger.debug("Server Path ACL="+fs.getUser().getServerPathACL());
 		fileNameList=getFileNameList(fs,serverPath);
-		Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
+		Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),config.getFtpMessage("150_Open_Data_Conn"));
 		if (fs.isPassiveModeTransfer)
 		{
 			logger.debug("Passive mode");
@@ -159,7 +159,7 @@ public class MyFileManager extends FileManager
 		{
 			logger.debug("Passive mode");
 			//Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("502_Command_Not_Implemeneted"));
-			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
+			Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),config.getFtpMessage("150_Open_Data_Conn"));
 			//fs.getPassiveChannelContext().close().addListener(new PassiveTxCompleteListener(fs.getPassiveServer(),fs,ctx));
 			PassiveModeTx passiveModeTx=new PassiveModeTx(fs.getPassiveChannelContext());
 			passiveModeTx.transFileNameList(fs, fileNameList);
@@ -167,7 +167,7 @@ public class MyFileManager extends FileManager
 		else
 		{
 			logger.debug("Active mode");
-			Utility.sendMessageToClient(ctx,fs,config.getFtpMessage("150_Open_Data_Conn"));
+			Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),config.getFtpMessage("150_Open_Data_Conn"));
 			ActiveModeTx aTx=new ActiveModeTx(fs);
 			aTx.transferFileNameList(fileNameList, ctx);
 		}

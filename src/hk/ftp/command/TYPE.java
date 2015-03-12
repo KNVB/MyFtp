@@ -26,10 +26,10 @@ public class TYPE implements FtpCommandInterface {
 			{
 				case "I":
 				case "A":fs.setTransferMode(param);
-						 Utility.sendMessageToClient(ctx,fs, fs.getConfig().getFtpMessage("200_Transfer_Set"));
+						 Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), fs.getConfig().getFtpMessage("200_Transfer_Set"));
 						 break;
 				default:
-					Utility.sendMessageToClient(ctx,fs, fs.getConfig().getFtpMessage("504_Command_Not_Support_This_Parameter"));
+					Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), fs.getConfig().getFtpMessage("504_Command_Not_Support_This_Parameter"));
 					break;
 			}
 		}

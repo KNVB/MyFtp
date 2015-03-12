@@ -55,7 +55,7 @@ public class LIST implements FtpCommandInterface
 		}
 		catch (AccessDeniedException|PathNotFoundException err)
 		{
-			Utility.sendMessageToClient(ctx,fs,err.getMessage());
+			Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),err.getMessage());
 		}
 	}	
 }

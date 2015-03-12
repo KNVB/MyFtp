@@ -16,7 +16,7 @@ public class SYST implements hk.ftp.FtpCommandInterface
 	public void execute(FtpSession fs, ChannelHandlerContext ctx,String param,Logger logger) 
 	{
 		// TODO Auto-generated method stub
-		Utility.sendMessageToClient(ctx,fs, fs.getConfig().getFtpMessage("215_System_Type")+" "+ Utility.getSystemType(logger));
+		Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), fs.getConfig().getFtpMessage("215_System_Type")+" "+ Utility.getSystemType(logger));
 	}
 
 

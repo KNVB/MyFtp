@@ -33,7 +33,7 @@ public class RETR implements FtpCommandInterface {
 		catch (AccessDeniedException | PathNotFoundException | QuotaExceedException err) 
 		{
 			// TODO Auto-generated catch block
-			Utility.sendMessageToClient(ctx,fs,err.getMessage());
+			Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),err.getMessage());
 		}
 	}	
 }

@@ -25,7 +25,7 @@ public class PORT implements FtpCommandInterface
 		String[] p=param.split(",");
 		if (p.length!=6)
 		{
-			Utility.sendMessageToClient(ctx,fs, fs.getConfig().getFtpMessage("500_Null_Command"));
+			Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), fs.getConfig().getFtpMessage("500_Null_Command"));
 		}
 		else
 		{
@@ -34,7 +34,7 @@ public class PORT implements FtpCommandInterface
 		    int low = Integer.parseInt(p[5]);
 		    if (high < 0 || high > 255 || low < 0 || low > 255)
 			{
-		    	Utility.sendMessageToClient(ctx,fs, fs.getConfig().getFtpMessage("500_Null_Command"));
+		    	Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), fs.getConfig().getFtpMessage("500_Null_Command"));
 			}
 		    else
 		    {	 
@@ -42,7 +42,7 @@ public class PORT implements FtpCommandInterface
 		    	logger.debug("Port="+clientPort);
 		    	fs.isPassiveModeTransfer=false;
 		    	fs.setClientDataPortNo(clientPort);
-		    	Utility.sendMessageToClient(ctx,fs, fs.getConfig().getFtpMessage("200_Port_Ok"));
+		    	Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(), fs.getConfig().getFtpMessage("200_Port_Ok"));
 		    }
 		}
 	}

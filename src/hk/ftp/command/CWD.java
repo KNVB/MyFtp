@@ -30,12 +30,12 @@ public class CWD implements FtpCommandInterface
 		try 
 		{
 			fm.changeDirectory(fs,param);
-			Utility.sendMessageToClient(ctx,fs,fs.getConfig().getFtpMessage("200_Ok"));
+			Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),fs.getConfig().getFtpMessage("200_Ok"));
 		} 
 		catch (AccessDeniedException | PathNotFoundException err) 
 		{
 			// TODO Auto-generated catch block
-			Utility.sendMessageToClient(ctx,fs,err.getMessage());
+			Utility.sendMessageToClient(ctx.channel(),logger,fs.getClientIp(),err.getMessage());
 		}
 	}
 }
